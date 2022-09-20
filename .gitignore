@@ -153,6 +153,7 @@ cython_debug/
 
 .vscode/
 tutorial/direct_run/out
+tutorial/_build
 _aiida_config
 _aiida_workdir
 .ipynb_checkpoints/

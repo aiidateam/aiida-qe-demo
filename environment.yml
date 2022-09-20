@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.9
+  - pip
   - aiida-core=2
   - aiida-quantumespresso.meta=4
   - qe=7
@@ -10,3 +11,5 @@ dependencies:
   - cryptography>=37.0.4  # lower gives wrong link to openssl
   - pip:
     - qeschema~=1.4.0
+  # documentation
+  - myst-nb

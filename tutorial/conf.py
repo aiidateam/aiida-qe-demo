@@ -5,12 +5,15 @@
 extensions = ["myst_nb"]
 
 # specify project details
-master_doc = "intro"
+master_doc = "index"
 project = "AiiDA Demonstration"
 
 # basic build settings
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 nitpicky = True
+
+html_theme = "furo"
+html_title = "AiiDA Demonstration"
 
 ## myst_nb default settings
 
@@ -36,7 +39,7 @@ nb_execution_mode = 'cache'
 # nb_execution_excludepatterns = ()
 
 # Execution timeout (seconds)
-# nb_execution_timeout = 30
+nb_execution_timeout = 120
 
 # Use temporary folder for the execution current working directory
 # nb_execution_in_temp = False

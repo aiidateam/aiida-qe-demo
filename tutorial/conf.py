@@ -48,7 +48,8 @@ nb_execution_mode = 'cache'
 # nb_execution_raise_on_error = False
 
 # Print traceback to stderr on execution error
-# nb_execution_show_tb = False
+import os
+nb_execution_show_tb = nb_execution_show_tb = "READTHEDOCS" in os.environ
 
 # Merge stdout/stderr execution output streams
 nb_merge_streams = True

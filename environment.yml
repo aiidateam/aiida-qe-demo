@@ -1,0 +1,12 @@
+name: aiida-qe-demo
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - aiida-core=2
+  - aiida-quantumespresso.meta=4
+  - qe=7
+  - jupyterlab=3
+  - cryptography>=37.0.4  # lower gives wrong link to openssl
+  - pip:
+    - qeschema~=1.4.0

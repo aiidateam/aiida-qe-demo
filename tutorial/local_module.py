@@ -11,6 +11,7 @@ from aiida.storage.sqlite_temp import SqliteTempBackend
 from aiida_pseudo.cli.install import download_sssp
 from aiida_pseudo.cli.utils import create_family_from_archive
 from aiida_pseudo.groups.family import SsspConfiguration, SsspFamily
+import psutil
 
 
 @dataclass
@@ -58,7 +59,9 @@ def load_computer():
     if created:
         computer.store()
         computer.set_minimum_job_poll_interval(0.0)
-        computer.set_default_mpiprocs_per_machine(2)
+        computer.set_default_mpiprocs_per_machine(
+            min(2, psutil.cpu_count(logical=False))
+        )
         computer.configure()
     return computer
 

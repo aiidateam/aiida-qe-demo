@@ -28,7 +28,7 @@ html_theme_options = {
     "use_download_button": True,
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",
-        "colab_url": "https://colab.research.google.com/",
+        # "colab_url": "https://colab.research.google.com/",
     },
     "use_sidenotes": True,
     "announcement": "This tutorial is in development!",

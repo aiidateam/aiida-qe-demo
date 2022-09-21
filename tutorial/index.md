@@ -40,7 +40,8 @@ Then, start the Jupyter notebook server:
 
 ```{toctree}
 :hidden:
+:numbered:
 
 intro
-next
+automating_inputs
 ```

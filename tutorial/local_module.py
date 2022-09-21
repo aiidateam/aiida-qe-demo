@@ -20,6 +20,7 @@ class AiiDALoaded:
     computer: orm.Computer
     pw_code: orm.Code
     pseudos: SsspFamily
+    si: orm.StructureData
 
 
 def load_temp_profile(
@@ -40,7 +41,9 @@ def load_temp_profile(
     computer = load_computer() if add_computer else None
     pw_code = load_pw_code(computer) if (computer and add_pw_code) else None
     pseudos = load_sssp_pseudos() if add_sssp else None
-    return AiiDALoaded(profile, computer, pw_code, pseudos)
+    si = create_si_structure()
+
+    return AiiDALoaded(profile, computer, pw_code, pseudos, si)
 
 
 def load_computer():
@@ -77,6 +80,20 @@ def load_pw_code(computer):
         code.store()
     return code
 
+
+def create_si_structure():
+    cell = [
+        [3.7881476451529, 0.0, 0.0],
+        [1.8940738225764, 3.2806320939886, 0.0],
+        [1.8940738225764, 1.0935440313296, 3.0930096003167],
+    ]
+    structure = orm.StructureData(cell=cell)
+    structure.append_atom(position=(0.0, 0.0, 0.0), symbols="Si")
+    structure.append_atom(
+        position=(1.8940738225764, 1.0935440313296, 0.77325240007918), symbols="Si"
+    )
+    structure.store()
+    return structure
 
 def load_sssp_pseudos(version="1.1", functional="PBE", protocol="efficiency"):
     """Load the SSSP pseudopotentials."""

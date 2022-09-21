@@ -55,7 +55,9 @@ nb_execution_mode = 'cache'
 # nb_execution_cache_path = ''
 
 # Exclude (POSIX) glob patterns for notebooks
-# nb_execution_excludepatterns = ()
+nb_execution_excludepatterns = (
+    "bands_workflow.ipynb",
+)
 
 # Execution timeout (seconds)
 nb_execution_timeout = 600

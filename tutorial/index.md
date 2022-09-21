@@ -44,4 +44,7 @@ Then, start the Jupyter notebook server:
 
 intro
 automating_inputs
+workflows
+error_handling
+bands_workflow
 ```

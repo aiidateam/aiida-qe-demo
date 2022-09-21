@@ -7,11 +7,11 @@ dependencies:
   - aiida-core=2
   - aiida-quantumespresso.meta=4
   - qe=7
+  - xmltodict
   - jupyterlab=3
   - jupyterlab-myst
   - cryptography>=37.0.4  # lower gives wrong link to openssl
-  - pip:
-    - qeschema~=1.4.0
   # documentation
   - myst-nb
-  - furo
+  - sphinx-book-theme
+

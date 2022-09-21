@@ -1,19 +1,38 @@
 # outline for a myst_nb project with sphinx
 # build with: sphinx-build -nW --keep-going -b html . ./_build/html
 
+# specify project details
+project = "AiiDA Demonstration"
+author = "The AiiDA team."
+copyright = f"2022 AiiDA. All Rights Reserved"
+master_doc = "index"
+
 # load extensions
 extensions = ["myst_nb"]
 
-# specify project details
-master_doc = "index"
-project = "AiiDA Demonstration"
+myst_enable_extensions = ["colon_fence"]
 
 # basic build settings
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 nitpicky = True
 
-html_theme = "furo"
-html_title = "AiiDA Demonstration"
+html_theme = "sphinx_book_theme"
+html_title = "QE Demonstration"
+html_favicon = "_static/favicon-32x32.png"
+html_logo = "_static/logo-light.svg"
+
+html_theme_options = {
+    "repository_url": "https://github.com/chrisjsewell/aiida-qe-demo",
+    "repository_branch": "main",
+    "path_to_docs": "tutorial",
+    "use_download_button": True,
+    "launch_buttons": {
+        "binderhub_url": "https://mybinder.org",
+        "colab_url": "https://colab.research.google.com/",
+    },
+    "use_sidenotes": True,
+    "announcement": "This tutorial is in development!",
+}
 
 ## myst_nb default settings
 

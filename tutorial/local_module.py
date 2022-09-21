@@ -15,7 +15,7 @@ import psutil
 
 
 @dataclass
-class AiiDAProfile:
+class AiiDALoaded:
     profile: manage.Profile
     computer: orm.Computer
     pw_code: orm.Code
@@ -23,7 +23,7 @@ class AiiDAProfile:
 
 
 def load_temp_profile(
-    debug=False, add_computer=True, add_pw_code=True, add_pseudos=True
+    debug=False, add_computer=True, add_pw_code=True, add_sssp=True
 ):
     """Load a temporary profile with a computer and code."""
     try:
@@ -37,13 +37,10 @@ def load_temp_profile(
             debug=debug,
         ),
     )
-    if add_computer:
-        computer = load_computer()
-    if add_pw_code:
-        code = load_pw_code(computer)
-    if add_pseudos:
-        pseudos = load_sssp_pseudos()
-    return AiiDAProfile(profile, computer, code, pseudos)
+    computer = load_computer() if add_computer else None
+    pw_code = load_pw_code(computer) if (computer and add_pw_code) else None
+    pseudos = load_sssp_pseudos() if add_sssp else None
+    return AiiDALoaded(profile, computer, pw_code, pseudos)
 
 
 def load_computer():
@@ -76,6 +73,7 @@ def load_pw_code(computer):
             remote_computer_exec=[computer, shutil.which("pw.x")],
         )
         code.label = "pw.x"
+        code.description = "pw.x code on local computer"
         code.store()
     return code
 

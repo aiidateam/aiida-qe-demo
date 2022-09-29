@@ -4,7 +4,7 @@ channels:
 dependencies:
   - python=3.9
   - pip
-  - aiida-core=2
+  - aiida-core~=2.0.4
   - aiida-quantumespresso.meta=4
   - qe=7
   - xmltodict
@@ -12,6 +12,11 @@ dependencies:
   - jupyterlab-myst
   - cryptography>=37.0.4  # lower gives wrong link to openssl
   # documentation
+  - myst-parser>=0.18.1
   - myst-nb
+  - sphinx-design
   - sphinx-book-theme
-
+  - sphinx-subfigure>=0.2.4
+  - pip:
+    # can use conda when version merged
+    - myst-nb>=0.17.0

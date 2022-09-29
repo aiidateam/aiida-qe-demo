@@ -151,10 +151,12 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+.DS_Store
 .vscode/
 tutorial/direct_run/out
 tutorial/_build
-_aiida_config
+_archive/
+_aiida_path
 _aiida_workdir
 .ipynb_checkpoints/
 TODO.md

@@ -1,20 +1,42 @@
-# AiiDA Quantum Espresso Demonstration
+---
+sd_hide_title: true
+---
+
+# AiiDA Demonstration
+
+![aiida graph](_static/aiida/common_workflow_calculator_plus_sponsors.png)
 
 This tutorial is a demonstration of the AiiDA workflow manager.
+It is intended to:
 
-It is intended to give a quick overview of the main features of AiiDA, and to show how they can be used to set up and run quantum calculations, using [Quantum ESPRESSO](https://www.quantum-espresso.org/) as an example.
+1. Give a brief overview of the main features of AiiDA
+2. Show how it can be used to set up and run quantum calculations, using [Quantum ESPRESSO](https://www.quantum-espresso.org/) as an example.
+3. Show how the results of these calculations can be explored.
+4. Show how calculation can be combined into complex workflow and run in high-throughput.
 
-The tutorial is divided into a number of sections, each of which is a Jupyter notebook.
+```{toctree}
+:hidden:
+:numbered:
 
-## Running the tutorial
+what_is_aiida
+qe_to_aiida
+automating_inputs
+workflows
+error_handling
+bands_workflow
+```
 
-The tutorial can be run in two ways:
+## Interacting with the tutorial
+
+The tutorial is divided into a number of sections, most of which are written Jupyter notebook, that can be run within the [Conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) provided in {download}`environment.yaml <../environment.yml>`.
 
 ### Using Binder
 
-The easiest way to run the tutorial is to click on the Binder badge below, which will launch a Binder instance with the tutorial pre-installed.
+The easiest way to run the notebooks is to click on the Binder badge below, which will launch a Binder instance with the environment pre-installed.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/chrisjsewell/aiida-qe-demo/main?labpath=tutorial%2Fintro.ipynb)
+
+Alternatively, any page with a 🚀 icon can be launched in Binder by clicking on it.
 
 ### Locally
 
@@ -37,14 +59,3 @@ Finally, activate the environment:
 Then, start the Jupyter notebook server:
 
     jupyter lab
-
-```{toctree}
-:hidden:
-:numbered:
-
-intro
-automating_inputs
-workflows
-error_handling
-bands_workflow
-```

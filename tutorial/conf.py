@@ -8,18 +8,22 @@ copyright = f"2022 AiiDA. All Rights Reserved"
 master_doc = "index"
 
 # load extensions
-extensions = ["myst_nb"]
+extensions = [
+    "myst_nb",
+    "sphinx_design",
+    "sphinx_subfigure",
+]
 
-myst_enable_extensions = ["colon_fence"]
+myst_enable_extensions = ["colon_fence", "deflist", "attrs_image"]
 
 # basic build settings
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 nitpicky = True
 
 html_theme = "sphinx_book_theme"
-html_title = "QE Demonstration"
-html_favicon = "_static/favicon-32x32.png"
 html_logo = "_static/logo-light.svg"
+html_title = "Demonstration"  # shown below logo
+html_favicon = "_static/favicon-32x32.png"
 
 html_theme_options = {
     "repository_url": "https://github.com/chrisjsewell/aiida-qe-demo",
@@ -32,6 +36,7 @@ html_theme_options = {
     },
     "use_sidenotes": True,
     "announcement": "This tutorial is in development!",
+    "extra_navbar": ""
 }
 
 ## myst_nb default settings
@@ -113,3 +118,6 @@ nb_merge_streams = True
 
 # Javascript to be loaded on pages containing ipywidgets
 # nb_ipywidgets_js = {'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js': {'integrity': 'sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=', 'crossorigin': 'anonymous'}, 'https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js': {'data-jupyter-widgets-cdn': 'https://cdn.jsdelivr.net/npm/', 'crossorigin': 'anonymous'}}
+
+nb_code_prompt_show = "Show Python API {type}"
+nb_code_prompt_hide = "Hide Python API {type}"

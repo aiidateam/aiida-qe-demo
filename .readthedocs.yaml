@@ -15,4 +15,4 @@ conda:
 
 sphinx:
   configuration: tutorial/conf.py
-  fail_on_warning: true
+  # fail_on_warning: true

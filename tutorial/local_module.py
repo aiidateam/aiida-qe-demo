@@ -2,16 +2,17 @@ import json
 import os
 import pathlib
 import shutil
+import warnings
 from dataclasses import dataclass
 
-os.environ["AIIDA_PATH"] = os.path.abspath("_aiida_config")
+os.environ["AIIDA_PATH"] = str(pathlib.Path(__file__).parent / "_aiida_path")
+import psutil
 # import after setting the environment variable
 from aiida import load_ipython_extension, load_profile, manage, orm
 from aiida.storage.sqlite_temp import SqliteTempBackend
 from aiida_pseudo.cli.install import download_sssp
 from aiida_pseudo.cli.utils import create_family_from_archive
 from aiida_pseudo.groups.family import SsspConfiguration, SsspFamily
-import psutil
 
 
 @dataclass
@@ -24,21 +25,26 @@ class AiiDALoaded:
 
 
 def load_temp_profile(
-    debug=False, add_computer=True, add_pw_code=True, add_sssp=True
+    name="temp_profile", add_computer=True, add_pw_code=True, add_sssp=True, debug=False, wipe=True,
 ):
     """Load a temporary profile with a computer and code."""
     try:
         load_ipython_extension(get_ipython())
     except NameError:
         pass
-    profile = load_profile(
-        SqliteTempBackend.create_profile(
-            "temp_profile",
+    path = pathlib.Path(os.environ["AIIDA_PATH"]) / ".aiida" / "repository" / name
+    if wipe and path.exists():
+        shutil.rmtree(path)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        manage.configuration.settings
+    profile = SqliteTempBackend.create_profile(
+            name,
             options={"runner.poll.interval": 1},
             debug=debug,
-        ),
     )
-    computer = load_computer() if add_computer else None
+    profile = load_profile(profile)
+    computer = load_computer(wipe) if add_computer else None
     pw_code = load_pw_code(computer) if (computer and add_pw_code) else None
     pseudos = load_sssp_pseudos() if add_sssp else None
     si = create_si_structure()
@@ -46,13 +52,16 @@ def load_temp_profile(
     return AiiDALoaded(profile, computer, pw_code, pseudos, si)
 
 
-def load_computer():
+def load_computer(wipe=True):
     """Idempotent function to add the computer to the database."""
+    path = pathlib.Path(__file__).parent / "_aiida_workdir"
+    if wipe and path.exists():
+        shutil.rmtree(path)
     created, computer = orm.Computer.collection.get_or_create(
         label="local_direct",
         description="local computer with direct scheduler",
         hostname="localhost",
-        workdir=os.path.abspath("_aiida_workdir"),
+        workdir=str(path.absolute()),
         transport_type="core.local",
         scheduler_type="core.direct",
     )
@@ -77,6 +86,7 @@ def load_pw_code(computer):
         )
         code.label = "pw.x"
         code.description = "pw.x code on local computer"
+        code.set_prepend_text("export OMP_NUM_THREADS=1")
         code.store()
     return code
 

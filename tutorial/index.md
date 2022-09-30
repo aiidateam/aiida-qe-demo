@@ -19,11 +19,11 @@ It is intended to:
 :numbered:
 
 what_is_aiida
+bands_workflow
 qe_to_aiida
 automating_inputs
 workflows
 error_handling
-bands_workflow
 ```
 
 ## Interacting with the tutorial

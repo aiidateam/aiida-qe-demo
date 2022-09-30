@@ -12,6 +12,7 @@ Workflow execution
 
 Data management
 : Data is stored reliably and efficiently, with a focus on the flow of data (its provenance), and searchability.
+: ![Data illustration](_static/aiida/illustration_aiida_database.jpg){height=150px align=center}
 
 Extensibility
 : AiiDA provides a flexible plugin system to extend the core functionality, with support for external codes, databases, and other features.

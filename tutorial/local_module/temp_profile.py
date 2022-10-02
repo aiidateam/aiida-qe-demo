@@ -20,9 +20,9 @@ from aiida_pseudo.groups.family import SsspConfiguration, SsspFamily
 class AiiDALoaded:
     profile: manage.Profile
     computer: orm.Computer
-    pw_code: orm.Code
+    code: orm.Code
     pseudos: SsspFamily
-    si: orm.StructureData
+    structure: orm.StructureData
 
 
 def load_temp_profile(
@@ -57,30 +57,29 @@ def load_temp_profile(
         manage.configuration.settings
 
     profile = get_profile()
-    if profile and profile.name == name:
-        return profile
-
-    path = pathlib.Path(os.environ["AIIDA_PATH"]) / ".aiida" / "repository" / name
-    if wipe_previous and path.exists():
-        shutil.rmtree(path)
-    profile = SqliteTempBackend.create_profile(
-        name,
-        options={"runner.poll.interval": 1},
-        debug=debug,
-    )
-
-    profile = load_profile(profile, allow_switch=True)
-    computer = load_computer(wipe_previous) if add_computer else None
+    loaded = False
+    if not (profile and profile.name == name):
+        loaded = True
+        path = pathlib.Path(os.environ["AIIDA_PATH"]) / ".aiida" / "repository" / name
+        if wipe_previous and path.exists():
+            shutil.rmtree(path)
+        profile = SqliteTempBackend.create_profile(
+            name,
+            options={"runner.poll.interval": 1},
+            debug=debug,
+        )
+    load_profile(profile, allow_switch=True)
+    computer = load_computer(profile.name, loaded and wipe_previous) if add_computer else None
     pw_code = load_pw_code(computer) if (computer and add_pw_code) else None
     pseudos = load_sssp_pseudos() if add_sssp else None
-    si = create_si_structure()
+    structure = create_si_structure()
 
-    return AiiDALoaded(profile, computer, pw_code, pseudos, si)
+    return AiiDALoaded(profile, computer, pw_code, pseudos, structure)
 
 
-def load_computer(wipe=True):
+def load_computer(profile_name: str, wipe=True):
     """Idempotent function to add the computer to the database."""
-    path = pathlib.Path(__file__).parent / "_aiida_workdir"
+    path = pathlib.Path(__file__).parent / "_aiida_workdir" / profile_name
     if wipe and path.exists():
         shutil.rmtree(path)
     created, computer = orm.Computer.collection.get_or_create(
@@ -140,7 +139,7 @@ def load_sssp_pseudos(version="1.1", functional="PBE", protocol="efficiency"):
     try:
         family = orm.Group.collection.get(label=label)
     except:
-        pseudos = pathlib.Path("sssp_pseudos")
+        pseudos = pathlib.Path(__file__).parent / "sssp_pseudos"
         pseudos.mkdir(exist_ok=True)
 
         filename = label.replace("/", "-")

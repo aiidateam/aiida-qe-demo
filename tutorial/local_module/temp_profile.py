@@ -7,8 +7,9 @@ from dataclasses import dataclass
 
 os.environ["AIIDA_PATH"] = str(pathlib.Path(__file__).parent / "_aiida_path")
 import psutil
+
 # import after setting the environment variable
-from aiida import load_ipython_extension, load_profile, manage, orm
+from aiida import get_profile, load_ipython_extension, load_profile, manage, orm
 from aiida.storage.sqlite_temp import SqliteTempBackend
 from aiida_pseudo.cli.install import download_sssp
 from aiida_pseudo.cli.utils import create_family_from_archive
@@ -25,26 +26,51 @@ class AiiDALoaded:
 
 
 def load_temp_profile(
-    name="temp_profile", add_computer=True, add_pw_code=True, add_sssp=True, debug=False, wipe=True,
+    name="temp_profile",
+    add_computer=True,
+    add_pw_code=True,
+    add_sssp=True,
+    debug=False,
+    wipe_previous=True,
 ):
-    """Load a temporary profile with a computer and code."""
+    """Load a temporary profile with a computer and code.
+
+    This function is idempotent, so it can be called multiple times without
+    creating duplicate computers and codes.
+
+    :param name: The name of the profile to load.
+    :param add_computer: Whether to add a computer to the profile.
+    :param add_pw_code: Whether to add a Quantum ESPRESSO pw.x code to the profile.
+    :param add_sssp: Whether to add the SSSP pseudopotentials to the profile.
+    :param debug: Whether to enable debug mode (printing all SQL queries).
+    :param wipe_previous: Whether to wipe any previous data
+    """
+    # load the ipython extension, if possible
     try:
         load_ipython_extension(get_ipython())
     except NameError:
         pass
-    path = pathlib.Path(os.environ["AIIDA_PATH"]) / ".aiida" / "repository" / name
-    if wipe and path.exists():
-        shutil.rmtree(path)
+
+    # load the configuration without emitting a warning
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", UserWarning)
         manage.configuration.settings
+
+    profile = get_profile()
+    if profile and profile.name == name:
+        return profile
+
+    path = pathlib.Path(os.environ["AIIDA_PATH"]) / ".aiida" / "repository" / name
+    if wipe_previous and path.exists():
+        shutil.rmtree(path)
     profile = SqliteTempBackend.create_profile(
-            name,
-            options={"runner.poll.interval": 1},
-            debug=debug,
+        name,
+        options={"runner.poll.interval": 1},
+        debug=debug,
     )
-    profile = load_profile(profile)
-    computer = load_computer(wipe) if add_computer else None
+
+    profile = load_profile(profile, allow_switch=True)
+    computer = load_computer(wipe_previous) if add_computer else None
     pw_code = load_pw_code(computer) if (computer and add_pw_code) else None
     pseudos = load_sssp_pseudos() if add_sssp else None
     si = create_si_structure()
@@ -104,6 +130,7 @@ def create_si_structure():
     )
     structure.store()
     return structure
+
 
 def load_sssp_pseudos(version="1.1", functional="PBE", protocol="efficiency"):
     """Load the SSSP pseudopotentials."""

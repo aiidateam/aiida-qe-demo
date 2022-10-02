@@ -36,7 +36,7 @@ html_theme_options = {
     },
     "use_sidenotes": True,
     "announcement": "This tutorial is in development!",
-    "extra_navbar": ""
+    "extra_navbar": "",
 }
 
 ## myst_nb default settings
@@ -54,7 +54,7 @@ html_theme_options = {
 # nb_kernel_rgx_aliases = {}
 
 # Execution mode for notebooks
-nb_execution_mode = 'cache'
+nb_execution_mode = "cache"
 
 # Path to folder for caching notebooks (default: <outdir>)
 # nb_execution_cache_path = ''
@@ -78,6 +78,7 @@ nb_execution_timeout = 600
 
 # Print traceback to stderr on execution error
 import os
+
 nb_execution_show_tb = nb_execution_show_tb = "READTHEDOCS" in os.environ
 
 # Merge stdout/stderr execution output streams

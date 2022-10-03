@@ -34,7 +34,7 @@ The tutorial is divided into a number of sections, most of which are written Jup
 
 The easiest way to run the notebooks is to click on the Binder badge below, which will launch a Binder instance with the environment pre-installed.
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/chrisjsewell/aiida-qe-demo/main?labpath=tutorial%2Fintro.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/chrisjsewell/aiida-qe-demo/main?labpath=tutorial)
 
 Alternatively, any page with a 🚀 icon can be launched in Binder by clicking on it.
 

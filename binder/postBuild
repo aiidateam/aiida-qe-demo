@@ -1,3 +1,4 @@
 #!/bin/bash
 
-echo "c.ContentsManager.allow_hidden = True" > .jupyter/jupyter_lab_config.py
+mkdir -p ~/.jupyter
+echo "c.ContentsManager.allow_hidden = True" > ~/.jupyter/jupyter_lab_config.py

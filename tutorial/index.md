@@ -18,9 +18,9 @@ It is intended to:
 :hidden:
 :numbered:
 
-what_is_aiida
-bands_workflow
-qe_to_aiida
+1_what_is_aiida
+2_bands_workflow
+3_qe_to_aiida
 automating_inputs
 workflows
 error_handling

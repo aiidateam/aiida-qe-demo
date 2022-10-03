@@ -1,6 +1,0 @@
-#!/bin/bash
-
-mkdir -p ~/.jupyter
-echo "{\"ContentsManager\": {\"allow_hidden\": true}}" > ~/.jupyter/jupyter_config.json
-
-exec "$@" 

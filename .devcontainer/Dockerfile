@@ -29,21 +29,17 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         openssh-client \
         procps \
         subversion \
-        wget \    
+        wget \
     && apt-get upgrade -y \
     && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
     && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc \
     && groupadd -r conda --gid 900 \
     && usermod -aG conda ${USERNAME} \
-    && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/add-notice.sh
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Copy environment.yml (if found) to a temp locaition so we update the environment.
-COPY .devcontainer/environment.yml /tmp/conda-tmp/
+COPY environment.yml /tmp/conda-tmp/
 RUN umask 0002 && \
     /opt/conda/bin/mamba env create -n aiida-qe-demo -f /tmp/conda-tmp/environment.yml \
     && echo "conda activate aiida-qe-demo" >> ~/.bashrc \
     && rm -rf /tmp/conda-tmp
-
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>

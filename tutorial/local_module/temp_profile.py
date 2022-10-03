@@ -1,11 +1,12 @@
+"""Load and populate a temporary profile with a computer and code."""
+from __future__ import annotations
+
 import json
 import os
 import pathlib
 import shutil
-import warnings
 from dataclasses import dataclass
 
-os.environ["AIIDA_PATH"] = str(pathlib.Path(__file__).parent / "_aiida_path")
 import psutil
 
 # import after setting the environment variable
@@ -51,11 +52,6 @@ def load_temp_profile(
     except NameError:
         pass
 
-    # load the configuration without emitting a warning
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", UserWarning)
-        manage.configuration.settings
-
     profile = get_profile()
     loaded = False
     if not (profile and profile.name == name):
@@ -69,7 +65,9 @@ def load_temp_profile(
             debug=debug,
         )
     load_profile(profile, allow_switch=True)
-    computer = load_computer(profile.name, loaded and wipe_previous) if add_computer else None
+    computer = (
+        load_computer(profile.name, loaded and wipe_previous) if add_computer else None
+    )
     pw_code = load_pw_code(computer) if (computer and add_pw_code) else None
     pseudos = load_sssp_pseudos() if add_sssp else None
     structure = create_si_structure()

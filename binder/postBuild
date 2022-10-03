@@ -1,4 +1,4 @@
 #!/bin/bash
 
 mkdir -p ~/.jupyter
-echo "c.ContentsManager.allow_hidden = True" > ~/.jupyter/jupyter_lab_config.py
+echo "{\"ContentsManager\": {\"allow_hidden\": true}}" > ~/.jupyter/jupyter_config.json

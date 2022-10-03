@@ -1,0 +1,49 @@
+FROM condaforge/mambaforge:4.14.0-0 as upstream
+
+# Update, change owner
+RUN groupadd -r conda --gid 900 \
+    && chown -R :conda /opt/conda \
+    && chmod -R g+w /opt/conda \
+    && find /opt -type d | xargs -n 1 chmod g+s
+
+# Reset and copy updated files with updated privs to keep image size down
+FROM mcr.microsoft.com/devcontainers/base:0-bullseye
+USER root
+COPY --from=upstream /opt /opt/
+
+# Setup conda to mirror contents from https://github.com/ContinuumIO/docker-images/blob/master/miniconda3/debian/Dockerfile
+ENV LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    PATH=/opt/conda/bin:$PATH
+ARG USERNAME=vscode
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get install -y --no-install-recommends \
+        bzip2 \
+        ca-certificates \
+        git \
+        libglib2.0-0 \
+        libsm6 \
+        libxext6 \
+        libxrender1 \
+        mercurial \
+        openssh-client \
+        procps \
+        subversion \
+        wget \    
+    && apt-get upgrade -y \
+    && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
+    && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc \
+    && groupadd -r conda --gid 900 \
+    && usermod -aG conda ${USERNAME} \
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/add-notice.sh
+
+# Copy environment.yml (if found) to a temp locaition so we update the environment.
+COPY .devcontainer/environment.yml /tmp/conda-tmp/
+RUN umask 0002 && \
+    /opt/conda/bin/mamba env create -n aiida-qe-demo -f /tmp/conda-tmp/environment.yml \
+    && echo "conda activate aiida-qe-demo" >> ~/.bashrc \
+    && rm -rf /tmp/conda-tmp
+
+# [Optional] Uncomment this section to install additional OS packages.
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends <your-package-list-here>

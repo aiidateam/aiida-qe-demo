@@ -13,3 +13,14 @@ repos:
     rev: 22.8.0
     hooks:
     -   id: black
+
+-  repo: local
+   hooks:
+   -  id: jupyter-nb-clear-outputs
+      name: jupyter-nb-clear-outputs
+      language: python
+      files: \.ipynb$
+      exclude: ^\.ipynb_checkpoints/.*$
+      additional_dependencies:
+        - "nbconvert"
+      entry: jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace

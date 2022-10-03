@@ -31,6 +31,7 @@ html_theme_options = {
     "path_to_docs": "tutorial",
     "use_download_button": True,
     "launch_buttons": {
+        "notebook_interface": "jupyterlab",
         "binderhub_url": "https://mybinder.org",
         # "colab_url": "https://colab.research.google.com/",
     },

@@ -8,8 +8,6 @@ import shutil
 from dataclasses import dataclass
 
 import psutil
-
-# import after setting the environment variable
 from aiida import get_profile, load_ipython_extension, load_profile, manage, orm
 from aiida.storage.sqlite_temp import SqliteTempBackend
 from aiida_pseudo.cli.install import download_sssp
@@ -20,19 +18,24 @@ from aiida_pseudo.groups.family import SsspConfiguration, SsspFamily
 @dataclass
 class AiiDALoaded:
     profile: manage.Profile
-    computer: orm.Computer
-    code: orm.Code
-    pseudos: SsspFamily
-    structure: orm.StructureData
+    computer: orm.Computer | None
+    code: orm.Code | None
+    pseudos: SsspFamily | None
+    structure: orm.StructureData | None
+    cpu_count: int
+    workdir: pathlib.Path
+    pwx_path: pathlib.Path
 
 
 def load_temp_profile(
     name="temp_profile",
-    add_computer=True,
-    add_pw_code=True,
-    add_sssp=True,
+    add_computer=False,
+    add_pw_code=False,
+    add_sssp=False,
+    add_structure_si=False,
     debug=False,
     wipe_previous=True,
+    cpu_count: int | None = None,
 ):
     """Load a temporary profile with a computer and code.
 
@@ -52,60 +55,75 @@ def load_temp_profile(
     except NameError:
         pass
 
+    workdir_path = pathlib.Path(__file__).parent / "_aiida_workdir" / name
+    repo_path = pathlib.Path(os.environ["AIIDA_PATH"]) / ".aiida" / "repository" / name
+
     profile = get_profile()
-    loaded = False
+
     if not (profile and profile.name == name):
-        loaded = True
-        path = pathlib.Path(os.environ["AIIDA_PATH"]) / ".aiida" / "repository" / name
-        if wipe_previous and path.exists():
-            shutil.rmtree(path)
+
+        if wipe_previous and repo_path.exists():
+            shutil.rmtree(repo_path)
+        if wipe_previous and workdir_path.exists():
+            shutil.rmtree(workdir_path)
+
         profile = SqliteTempBackend.create_profile(
             name,
             options={"runner.poll.interval": 1},
             debug=debug,
         )
-    load_profile(profile, allow_switch=True)
-    computer = (
-        load_computer(profile.name, loaded and wipe_previous) if add_computer else None
-    )
-    pw_code = load_pw_code(computer) if (computer and add_pw_code) else None
+        load_profile(profile, allow_switch=True)
+        config = manage.get_config()
+        config.add_profile(profile)
+
+    cpu_count = cpu_count or min(2, psutil.cpu_count(logical=False))
+    if not shutil.which("pw.x"):
+        raise RuntimeError("pw.x not found in PATH")
+    pwx_path = pathlib.Path(shutil.which("pw.x"))
+
+    computer = load_computer(workdir_path, cpu_count) if add_computer else None
+    pw_code = load_pw_code(computer, pwx_path) if (computer and add_pw_code) else None
     pseudos = load_sssp_pseudos() if add_sssp else None
-    structure = create_si_structure()
+    structure = create_si_structure() if add_structure_si else None
 
-    return AiiDALoaded(profile, computer, pw_code, pseudos, structure)
+    return AiiDALoaded(
+        profile,
+        computer,
+        pw_code,
+        pseudos,
+        structure,
+        cpu_count,
+        workdir_path,
+        pwx_path,
+    )
 
 
-def load_computer(profile_name: str, wipe=True):
+def load_computer(work_directory: pathlib.Path, cpu_count: int):
     """Idempotent function to add the computer to the database."""
-    path = pathlib.Path(__file__).parent / "_aiida_workdir" / profile_name
-    if wipe and path.exists():
-        shutil.rmtree(path)
     created, computer = orm.Computer.collection.get_or_create(
         label="local_direct",
         description="local computer with direct scheduler",
         hostname="localhost",
-        workdir=str(path.absolute()),
+        workdir=str(work_directory.absolute()),
         transport_type="core.local",
         scheduler_type="core.direct",
     )
     if created:
         computer.store()
         computer.set_minimum_job_poll_interval(0.0)
-        computer.set_default_mpiprocs_per_machine(
-            min(2, psutil.cpu_count(logical=False))
-        )
+        computer.set_default_mpiprocs_per_machine(cpu_count)
         computer.configure()
     return computer
 
 
-def load_pw_code(computer):
+def load_pw_code(computer, exec_path: pathlib.Path):
     """Idempotent function to add the code to the database."""
     try:
         code = orm.load_code("pw.x@local_direct")
     except:
         code = orm.Code(
             input_plugin_name="quantumespresso.pw",
-            remote_computer_exec=[computer, shutil.which("pw.x")],
+            remote_computer_exec=[computer, str(exec_path)],
         )
         code.label = "pw.x"
         code.description = "pw.x code on local computer"

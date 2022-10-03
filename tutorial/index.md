@@ -22,8 +22,8 @@ It is intended to:
 2_bands_workflow
 3_qe_to_aiida
 automating_inputs
-workflows
 error_handling
+glossary
 ```
 
 ## Interacting with the tutorial

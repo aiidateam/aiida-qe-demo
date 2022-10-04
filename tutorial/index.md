@@ -22,7 +22,7 @@ It is intended to:
 2_bands_workflow
 3_qe_to_aiida
 4_generating_inputs
-error_handling
+5_error_handling
 6_write_your_own_workflow
 glossary
 ```

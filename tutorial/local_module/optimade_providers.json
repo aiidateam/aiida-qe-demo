@@ -1,0 +1,79 @@
+[
+  {
+    "id": "cod",
+    "name": "Crystallography Open Database",
+    "description": "Open-access collection of crystal structures of organic, inorganic, metal-organics compounds and minerals, excluding biopolymers",
+    "base_url": "https://www.crystallography.net/cod/optimade/v1",
+    "homepage": "https://www.crystallography.net/cod"
+  },
+  {
+    "id": "mc3d",
+    "name": "MC3D - Materials Cloud three-dimensional crystals database",
+    "description": "Curated set of relaxed three-dimensional crystal structures based on raw CIF data from the experimantal databases MPDS, COD, and ICSD.\\n",
+    "base_url": "https://aiida.materialscloud.org/mc3d/optimade/v1",
+    "homepage": "https://materialscloud.org/explore/mc3d"
+  },
+  {
+    "id": "mp",
+    "name": "The Materials Project",
+    "description": "The Materials Project OPTIMADE endpoint",
+    "base_url": "https://optimade.materialsproject.org/v1",
+    "homepage": "https://www.materialsproject.org"
+  },
+  {
+    "id": "mpds",
+    "name": "Materials Platform for Data Science",
+    "description": "A highly curated Pauling File dataset based on ~0.5M publications and backing up Springer Materials, ICDD PDF, ASM APD, MedeA, Pearson Crystal Data, AtomWork Advanced, etc.",
+    "base_url": "https://api.mpds.io/v1",
+    "homepage": "https://mpds.io"
+  },
+  {
+    "id": "nmd",
+    "name": "novel materials discovery (NOMAD)",
+    "description": "A FAIR data sharing platform for materials science data",
+    "base_url": "https://nomad-lab.eu/prod/rae/optimade/v1",
+    "homepage": "https://nomad-lab.eu"
+  },
+  {
+    "id": "odbx",
+    "name": "odbx",
+    "description": "The Open Database of Xtals is run by the group of Dr Andrew Morris at the universities of Birmingham and Cambridge and is constructed using the matador library.",
+    "base_url": "https://optimade.odbx.science/v1",
+    "homepage": "https://odbx.science"
+  },
+  {
+    "id": "omdb_production",
+    "name": "Open Materials Database (omdb) production database",
+    "description": "This is the main production version of the Open Materials Database",
+    "base_url": "http://optimade.openmaterialsdb.se/v1",
+    "homepage": "http://openmaterialsdb.se"
+  },
+  {
+    "id": "oqmd",
+    "name": "The OQMD",
+    "description": "The Open Quantum Materials Database endpoint",
+    "base_url": "http://oqmd.org/optimade/v1",
+    "homepage": "http://oqmd.org"
+  },
+  {
+    "id": "jarvis",
+    "name": "JARVIS-DFT",
+    "description": "JARVIS-DFT is a materials property repository focused on density functional theory (DFT) predictions of material properties, especially for crystalline materials.",
+    "base_url": "https://jarvis.nist.gov/optimade/jarvisdft/v1",
+    "homepage": "https://jarvis.nist.gov"
+  },
+  {
+    "id": "tcod",
+    "name": "Theoretical Crystallography Open Database",
+    "description": "Open-access collection of theoretically calculated or refined crystal structures of organic, inorganic, metal-organic compounds and minerals, excluding biopolymers",
+    "base_url": "https://www.crystallography.net/tcod/optimade/v1",
+    "homepage": "https://www.crystallography.net/tcod"
+  },
+  {
+    "id": "twodmatpedia",
+    "name": "2DMatpedia",
+    "description": "2DMatpedia, an open computational database of two-dimensional materials from top-down and bottom-up approaches",
+    "base_url": "http://optimade.2dmatpedia.org/v1",
+    "homepage": "http://2dmatpedia.org"
+  }
+]

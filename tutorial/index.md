@@ -21,8 +21,9 @@ It is intended to:
 1_what_is_aiida
 2_bands_workflow
 3_qe_to_aiida
-automating_inputs
+4_generating_inputs
 error_handling
+6_write_your_own_workflow
 glossary
 ```
 

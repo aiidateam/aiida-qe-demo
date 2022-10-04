@@ -36,7 +36,7 @@ html_theme_options = {
         # "colab_url": "https://colab.research.google.com/",
     },
     "use_sidenotes": True,
-    "announcement": "This tutorial is in development!",
+    # "announcement": "This tutorial is in development!",
     "extra_navbar": "",
 }
 

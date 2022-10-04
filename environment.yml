@@ -20,3 +20,4 @@ dependencies:
   - sphinx-design
   - sphinx-book-theme
   - sphinx-subfigure>=0.2.4
+  - optimade

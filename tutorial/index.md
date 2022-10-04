@@ -24,6 +24,7 @@ It is intended to:
 4_generating_inputs
 5_error_handling
 6_write_your_own_workflow
+7_next_steps
 glossary
 ```
 

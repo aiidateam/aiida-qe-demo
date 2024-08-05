@@ -1,4 +1,5 @@
 """Load and populate a temporary profile with a computer and code."""
+
 from __future__ import annotations
 
 import json
